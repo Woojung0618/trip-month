@@ -2,56 +2,63 @@
 
 월별 여행지 추천 지도 웹 (React + Vite + Express + SQLite)
 
+**배포 URL**: [https://trip-map-global.onrender.com/](https://trip-map-global.onrender.com/)
+
 ## 구조
 
-- **client**: React + Vite 프론트엔드 (메인 지도 뷰, 관리자 페이지)
-- **server**: Express API + SQLite (목적지 조회/저장)
+| 디렉터리 | 설명 |
+|----------|------|
+| **client** | React + Vite 프론트엔드. 메인 지도(월별 추천지), 관리자 페이지(`/admin`) |
+| **server** | Express API + SQLite. 목적지 조회·수정, 관리자 로그인 |
+
+**지도**  
+메인 화면은 [react-simple-maps](https://www.react-simple-maps.io/)와 [world-atlas](https://github.com/topojson/world-atlas) TopoJSON(`countries-110m`)으로 세계 지도를 그립니다. 위·경도가 있으면 해당 좌표에, 없으면 국가 중심(centroid)에 핀을 표시합니다.
 
 ## 실행
 
 ```bash
-# 의존성 설치 (루트 + client + server)
-npm install
-cd client && npm install && cd ..
-cd server && npm install && cd ..
+# 의존성 설치 (루트 → client → server)
+npm install && cd client && npm install && cd ../server && npm install && cd ..
 
 # DB 초기화 (테이블 생성 + 시드 데이터)
 npm run db:init
 
-# 개발 (클라이언트 + 서버 동시 실행)
+# 개발 (클라이언트 + 서버 동시)
 npm run dev
 ```
 
-- 클라이언트: http://localhost:5173
-- API: http://localhost:3001
+- 클라이언트: http://localhost:5173  
+- API/서버: http://localhost:3001  
 
 ## API
 
-- `GET /api/destinations?month=1` — 월별 추천지 목록
-- `GET /api/destinations` — 전체 목록
-- `PATCH /api/destinations/:id` — 제휴 링크·평균가 수정 (body: `affiliateUrl`, `averageFlightPrice`)
-
-## 배포 (MVP)
-
-```bash
-npm run deploy:build   # 클라이언트 빌드 + DB 시드
-npm start              # 서버 실행 (client/dist 자동 제공)
-```
-
-- 서버는 `client/dist`가 있으면 정적 파일을 제공하고, `/api`는 그대로 동작합니다.
-- 상세: [DEPLOY.md](./DEPLOY.md) (Railway/Render/Docker 등)
+| 메서드 | 경로 | 설명 |
+|--------|------|------|
+| GET | `/api/destinations?month=1` | 해당 월 추천지 목록 |
+| GET | `/api/destinations` | 전체 목록 |
+| GET | `/api/destinations/:id/months` | 해당 목적지가 추천되는 월 목록 |
+| PATCH | `/api/destinations/:id` | 제휴 링크·평균가 등 수정 (body: `affiliateUrl`, `averageFlightPrice` 등) |
+| POST | `/api/admin/login` | 관리자 로그인 (body: `password`) |
+| GET | `/api/health` | 헬스체크 |
 
 ## 관리자
 
 - 경로: `/admin`
-- 인증: 서버의 `ADMIN_PASSWORD` 환경 변수와 일치하는 비밀번호로 로그인 (개발 시 .env 설정)
+- 로그인: 서버의 `ADMIN_PASSWORD` 환경 변수와 일치하는 비밀번호 사용 (로컬은 `.env`에 설정)
 
-## 지도 에셋 (Figma 국가 PNG)
+## 배포
 
-지도는 Figma [SVG World Map](https://www.figma.com/design/83V4lURbAg1Dqyly4JS5PJ/)의 국가 단위 PNG를 사용합니다.
+- **빌드**: `npm run deploy:build` (클라이언트 빌드 + DB 시드)
+- **실행**: `npm start` (서버가 `client/dist` 정적 제공 + API)
+- **Render**: [DEPLOY.md](./DEPLOY.md) 참고 (Blueprint·환경 변수·DB 영속화 등)
 
-- Figma에서 각 국가 그룹(2글자 코드: `kr`, `jp`, `us` 등)을 선택 후 **Export → PNG**로 저장
-- `client/public/countries/{코드}.png` 에 넣기 (예: `kr.png`, `jp.png`)
-- 자세한 절차는 `client/public/countries/README.md` 참고
-- PNG가 없는 국가는 회색 영역으로만 표시됨
-# trip-month
+## 스크립트 요약
+
+| 스크립트 | 설명 |
+|----------|------|
+| `npm run dev` | 클라이언트·서버 동시 개발 서버 |
+| `npm run build` | 클라이언트만 빌드 |
+| `npm run db:init` | DB 초기화 + 시드 |
+| `npm run deploy:build` | 빌드 + DB 시드 (배포 전용) |
+| `npm start` | 서버만 실행 (프로덕션) |
+| `npm run preview` | 빌드 후 로컬에서 프로덕션 동작 확인 |
