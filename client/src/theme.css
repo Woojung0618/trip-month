@@ -1,0 +1,73 @@
+/**
+ * 앱 전역 색상 테마 — CSS 변수로 관리.
+ * 컴포넌트에서는 var(--color-*) 로 참조.
+ */
+:root {
+  /* Primary (파란 계열) */
+  --color-primary: #2563eb;
+  --color-primary-hover: #1d4ed8;
+  --color-primary-muted: rgba(59, 130, 246, 0.2);
+  --color-primary-shadow: rgba(37, 99, 235, 0.4);
+
+  /* 배경 */
+  --color-bg: #ffffff;
+  --color-bg-subtle: #f9fafb;
+  --color-bg-muted: #f3f4f6;
+  --color-bg-disabled: #f1f5f9;
+  --color-bg-map: #eff6ff;
+  --color-bg-map-end: #dbeafe;
+  --color-bg-overlay: rgba(0, 0, 0, 0.4);
+  --color-bg-header: rgba(255, 255, 255, 0.9);
+  --color-bg-card-alt: #f8fafc;
+  --color-bg-weather: #eff6ff;
+  --color-bg-price: #f0fdf4;
+  --color-bg-season: #faf5ff;
+
+  /* 테두리 / 구분선 */
+  --color-border: #e5e7eb;
+  --color-border-light: #eee;
+
+  /* 텍스트 */
+  --color-text: #111827;
+  --color-text-secondary: #374151;
+  --color-text-muted: #4b5563;
+  --color-text-muted-2: #6b7280;
+  --color-text-muted-3: #64748b;
+  --color-text-muted-4: #475467;
+  --color-text-muted-5: #9ca3af;
+  --color-text-on-primary: #fff;
+  --color-text-on-overlay: rgba(255, 255, 255, 0.95);
+  --color-text-on-overlay-sub: rgba(255, 255, 255, 0.9);
+
+  /* 보조 색 (아이콘/강조) */
+  --color-accent-weather: #2563eb;
+  --color-accent-price: #16a34a;
+  --color-accent-season: #7c3aed;
+  --color-accent-cta: #2563eb;
+  --color-link: #2563eb;
+  --color-link-admin: #666;
+
+  /* 상태 */
+  --color-destructive: #dc2626;
+  --color-hover: #e5e7eb;
+
+  /* 지도 (TopoJSON) */
+  --color-map-fill: #D6E4F0;
+  --color-map-stroke: #FFFFFF;
+  --color-map-hover: #C2D9ED;
+  --color-map-pressed: #B0CFEA;
+
+  /* 그림자 */
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  --shadow-button: 0 4px 14px 0 rgba(37, 99, 235, 0.4);
+  --shadow-zoom: 0 2px 8px rgba(0, 0, 0, 0.15);
+  --shadow-marker: 0 4px 8px rgba(0, 0, 0, 0.15);
+  --shadow-card: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+
+  /* 그라데이션 */
+  --gradient-map: linear-gradient(to bottom, var(--color-bg-map) 0%, var(--color-bg-map-end) 100%);
+  --gradient-overlay: linear-gradient(to top, rgba(0, 0, 0, 0.65) 0%, transparent 55%);
+  --gradient-cta: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+}

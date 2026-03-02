@@ -1,0 +1,20 @@
+# Render Blueprint - MVP 배포
+# https://dashboard.render.com 에서 Repo 연결 후 "Blueprint" 선택 시 이 파일로 자동 설정됩니다.
+services:
+  - type: web
+    name: trip-map-global
+    runtime: node
+    region: singapore
+    plan: free
+    buildCommand: |
+      npm install
+      cd client && npm install && cd ..
+      cd server && npm install && cd ..
+      npm run deploy:build
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_VERSION
+        value: "20"
+      - key: ADMIN_PASSWORD
+        sync: false

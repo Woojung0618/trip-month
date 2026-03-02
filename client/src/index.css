@@ -1,0 +1,146 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html, body {
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* 지도 핀/말풍선 레이어: 말풍선이 항상 모든 핀 위에 오도록 (디버깅 시 [data-map-layer]로 구분) */
+.simple-map-pins-layer--pin {
+  z-index: 0;
+}
+.simple-map-pins-layer--bubble {
+  z-index: 10;
+}
+
+/* 지도 말풍선 핀 — CSS 구현 (꼬리까지 drop-shadow 적용) */
+.simple-map-pin {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+/* 말풍선 — 핀보다 앞에 표시 */
+.simple-map-pin .map-speech-bubble {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  align-items: flex-start;
+  gap: 0;
+  background: var(--color-bg);
+  border-radius: 10px;
+  padding: 18px;
+  color: var(--color-text);
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 500;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transform: translate(-50%, calc(-100% - 14px));
+  min-width: 180px;
+  max-width: 320px;
+  overflow: hidden;
+  word-break: break-word;
+  box-sizing: border-box;
+}
+
+.simple-map-pin .map-speech-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-top: 8px solid var(--color-bg);
+  border-left: 8px solid transparent;
+  border-right: 8px solid transparent;
+}
+
+/* ref: 파란 원형 핀 + 흰 테두리, 펄스 */
+.simple-map-pin-pin {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  border: 2px solid var(--color-text-on-primary);
+  box-shadow: var(--shadow-marker);
+  pointer-events: none;
+}
+
+.simple-map-pin-pin::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: -4px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 2px solid var(--color-primary);
+  opacity: 0.4;
+  animation: simple-map-pin-pulse 2s ease-out infinite;
+}
+
+@keyframes simple-map-pin-pulse {
+  0% { transform: scale(0.8); opacity: 0.4; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+/* TopoJSON 지도 마커 펄스 */
+@keyframes destination-marker-ping {
+  0% { transform: scale(0.8); opacity: 0.25; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+/* 목적지 상세 팝업 — ref-figma-make 스타일: 페이드 + 스케일 + 살짝 위에서 등장 */
+.destination-detail-overlay {
+  opacity: 0;
+  animation: destination-detail-overlay-in 0.2s ease-out forwards;
+}
+.destination-detail-overlay.destination-detail--exiting {
+  animation: destination-detail-overlay-out 0.2s ease-in forwards;
+}
+.destination-detail-modal {
+  opacity: 0;
+  transform: scale(0.9) translateY(20px);
+  animation: destination-detail-modal-in 0.25s ease-out forwards;
+}
+.destination-detail-modal.destination-detail--exiting {
+  animation: destination-detail-modal-out 0.2s ease-in forwards;
+}
+@keyframes destination-detail-overlay-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes destination-detail-overlay-out {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+@keyframes destination-detail-modal-in {
+  from { opacity: 0; transform: scale(0.9) translateY(20px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes destination-detail-modal-out {
+  from { opacity: 1; transform: scale(1) translateY(0); }
+  to { opacity: 0; transform: scale(0.9) translateY(20px); }
+}
