@@ -77,7 +77,7 @@ export default function DestinationMarker({
           fill="white"
           stroke="var(--color-primary)"
           strokeWidth={3}
-          style={{ filter: 'drop-shadow(0 4px 8px rgba(0,0,0,0.15))' }}
+          style={{ filter: 'drop-shadow(var(--shadow-marker))' }}
         />
         <text
           textAnchor="middle"

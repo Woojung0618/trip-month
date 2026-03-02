@@ -34,7 +34,7 @@ export default function MarkerTooltip({ x, y, destination }: MarkerTooltipProps)
           border: '2px solid var(--color-border)',
           borderRadius: 12,
           padding: '10px 14px',
-          boxShadow: '0 4px 20px rgba(0,0,0,0.15)',
+          boxShadow: 'var(--shadow-md)',
           minWidth: 160,
           maxWidth: 220,
           textAlign: 'center',
