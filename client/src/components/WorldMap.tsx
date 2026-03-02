@@ -8,7 +8,8 @@ import {
 } from 'react-simple-maps'
 import type { Destination } from '../api/client'
 import { getCountryCentroid } from '../data/countryCentroids'
-import DestinationMarker from './DestinationMarker'
+import DestinationMarker, { type TooltipState } from './DestinationMarker'
+import MarkerTooltip from './MarkerTooltip'
 
 const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
 const MIN_ZOOM = 0.5
@@ -28,6 +29,7 @@ interface WorldMapProps {
 export default function WorldMap({ destinations, onDestinationClick }: WorldMapProps) {
   const [zoom, setZoom] = useState(1)
   const [center, setCenter] = useState<[number, number]>([0, 20])
+  const [tooltip, setTooltip] = useState<TooltipState | null>(null)
   const handleMoveEnd = useCallback(
     (payload: { coordinates: [number, number]; zoom: number }) => {
       if (payload.coordinates != null) setCenter(payload.coordinates)
@@ -59,6 +61,7 @@ export default function WorldMap({ destinations, onDestinationClick }: WorldMapP
 
   return (
     <div
+      data-map-container="true"
       style={{
         position: 'relative',
         width: '100%',
@@ -106,10 +109,20 @@ export default function WorldMap({ destinations, onDestinationClick }: WorldMapP
               destination={destination}
               zoom={zoom}
               onClick={() => onDestinationClick(destination)}
+              onTooltipShow={setTooltip}
+              onTooltipHide={() => setTooltip(null)}
             />
           ))}
         </ZoomableGroup>
       </ComposableMap>
+
+      {tooltip && (
+        <MarkerTooltip
+          x={tooltip.x}
+          y={tooltip.y}
+          destination={tooltip.destination}
+        />
+      )}
 
       {/* 우측 하단 확대/축소 버튼 */}
       <div
