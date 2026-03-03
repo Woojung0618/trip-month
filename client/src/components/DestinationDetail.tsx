@@ -4,6 +4,7 @@ import { getDestinationMonths } from '../api/client'
 import { codeToNameKo } from '../data/countries'
 
 const CTA_LABEL = '트립닷컴 항공권 최저가 확인하기'
+const AFFILIATE_NOTE = '제휴 링크를 통해 항공권 구매 시 사이트 운영자에게 소정의 수수료가 지급됩니다.'
 
 interface DestinationDetailProps {
   destination: Destination
@@ -61,7 +62,7 @@ export default function DestinationDetail({ destination, onClose }: DestinationD
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        zIndex: 100,
+        zIndex: 1100,
       }}
       onClick={handleClose}
       role="dialog"
@@ -306,8 +307,7 @@ export default function DestinationDetail({ destination, onClose }: DestinationD
                     textAlign: 'center',
                   }}
                 >
-                  제휴 링크를 통해 항공권 구매 시 사이트 운영자에게 소정의 수수료가 지급됩니다. 
-                  {affiliateNote && ` ${affiliateNote}`}
+                  {AFFILIATE_NOTE} {affiliateNote && ` ${affiliateNote}`}
                 </p>
               
             </div>

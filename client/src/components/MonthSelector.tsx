@@ -30,8 +30,6 @@ interface MonthSelectorProps {
   onClearFilters: () => void
 }
 
-const OUTFIT = { fontFamily: "'Outfit', sans-serif" }
-
 const filterBtnBase = {
   display: 'flex' as const,
   alignItems: 'center' as const,
@@ -45,7 +43,6 @@ const filterBtnBase = {
   fontWeight: 500,
   cursor: 'pointer' as const,
   whiteSpace: 'nowrap' as const,
-  ...OUTFIT,
   transition: 'all 0.15s',
   boxShadow: 'var(--shadow-sm)',
 }
@@ -107,9 +104,9 @@ export default function MonthSelector({
         borderBottom: '1px solid var(--color-border-light)',
         boxShadow: 'var(--shadow-sm)',
         overflow: 'visible',
+        fontFamily: "'Pretendard', sans-serif",
       }}
     >
-    
       <div
         style={{
           display: 'flex',
@@ -139,18 +136,18 @@ export default function MonthSelector({
                 type="button"
                 onClick={() => onSelect(monthNum)}
                 style={{
-                  ...OUTFIT,
                   padding: '7px 14px',
                   borderRadius: 20,
                   border: 'none',
                   background: isSelected ? 'var(--color-primary)' : 'transparent',
                   color: isSelected ? 'var(--color-text-on-primary)' : 'var(--color-text-muted-2)',
                   fontSize: 14,
-                  fontWeight: isSelected ? 600 : 500,
+                  fontWeight: 600,
                   cursor: 'pointer',
                   whiteSpace: 'nowrap',
                   flexShrink: 0,
                   transition: 'all 0.15s',
+                  fontFamily: "'Pretendard', sans-serif",
                 }}
                 onMouseEnter={(e) => {
                   if (!isSelected) {
@@ -194,7 +191,6 @@ export default function MonthSelector({
                   background: 'none',
                   border: 'none',
                   cursor: 'pointer',
-                  ...OUTFIT,
                   textDecoration: 'underline',
                   padding: '2px 4px',
                 }}
@@ -294,7 +290,6 @@ export default function MonthSelector({
                         border: 'none',
                         cursor: 'pointer',
                         fontSize: 13,
-                        ...OUTFIT,
                         textAlign: 'left',
                         gap: 8,
                       }}
@@ -341,7 +336,6 @@ export default function MonthSelector({
                       cursor: 'pointer',
                       fontSize: 12,
                       color: 'var(--color-text-muted-5)',
-                      ...OUTFIT,
                       textDecoration: 'underline',
                     }}
                     onMouseEnter={(e) => { e.currentTarget.style.color = 'var(--color-destructive)' }}
@@ -416,7 +410,6 @@ export default function MonthSelector({
                         border: 'none',
                         cursor: 'pointer',
                         fontSize: 13,
-                        ...OUTFIT,
                         textAlign: 'left',
                       }}
                       onMouseEnter={(e) => {
