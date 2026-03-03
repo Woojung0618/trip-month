@@ -1,11 +1,17 @@
-import Database from 'better-sqlite3'
-import { fileURLToPath } from 'url'
-import { dirname, join } from 'path'
+import pg from 'pg'
 
-const __dirname = dirname(fileURLToPath(import.meta.url))
-const dbPath = join(__dirname, '..', 'trip-map.db')
+const { Pool } = pg
 
-const db = new Database(dbPath)
-db.pragma('journal_mode = WAL')
+const connectionString = process.env.DATABASE_URL
+if (!connectionString) {
+  console.warn('DATABASE_URL이 설정되지 않았습니다. .env에 postgresql://... 형식으로 추가하세요.')
+}
 
-export default db
+const pool = new Pool({
+  connectionString,
+  max: 10,
+  idleTimeoutMillis: 30000,
+  connectionTimeoutMillis: 5000,
+})
+
+export default pool
