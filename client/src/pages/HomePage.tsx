@@ -64,7 +64,20 @@ export default function HomePage() {
         }}
       />
       {loading ? (
-        <p style={{ textAlign: 'center', padding: '2rem', flex: 1 }}>불러오는 중...</p>
+        <div
+          style={{
+            flex: 1,
+            minHeight: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: 'var(--gradient-map)',
+            padding: '0 0 1rem',
+            boxSizing: 'border-box',
+          }}
+        >
+          <p style={{ color: 'var(--color-text-muted-5)', margin: 0 }}>불러오는 중...</p>
+        </div>
       ) : (
         <div style={{ flex: 1, minHeight: 0 }}>
           <WorldMap

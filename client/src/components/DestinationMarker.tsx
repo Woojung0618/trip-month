@@ -21,6 +21,10 @@ interface DestinationMarkerProps {
   coordinates: [number, number]
   destination: Destination
   zoom?: number
+  /** 지도 컨테이너 너비(px). 주어지면 뷰포트가 달라져도 마커 픽셀 크기 일정 유지 */
+  containerWidth?: number
+  /** 마커 기준 너비 (containerWidth와 함께 사용) */
+  referenceWidth?: number
   onClick: () => void
   onTooltipShow: (state: TooltipState) => void
   onTooltipHide: () => void
@@ -32,6 +36,8 @@ export default function DestinationMarker({
   coordinates,
   destination,
   zoom = 1,
+  containerWidth,
+  referenceWidth = 600,
   onClick,
   onTooltipShow,
   onTooltipHide,
@@ -39,10 +45,18 @@ export default function DestinationMarker({
   const { country } = destination
   const displayEmoji = countryCodeToFlag(country) || '🏳️'
 
+  // 줌 시: scale(1/zoom)으로 마커가 지도와 함께 커지지 않도록 유지.
+  // 뷰포트: 가로가 좁을 때만 scale up (넓은 화면에서는 1 유지해서 원래 크기).
+  const viewportScale =
+    containerWidth != null && containerWidth > 0 && containerWidth < referenceWidth
+      ? referenceWidth / containerWidth
+      : 1
+  const scale = viewportScale * (1 / zoom)
+
   return (
     <Marker coordinates={coordinates}>
       <g
-        transform={zoom !== 1 ? `scale(${1 / zoom})` : undefined}
+        transform={scale !== 1 ? `scale(${scale})` : undefined}
         onMouseEnter={(e) => {
           const el = (e.target as SVGElement).closest('svg')
           const container = el?.closest('[data-map-container="true"]') as HTMLElement | null

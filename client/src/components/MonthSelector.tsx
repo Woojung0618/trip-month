@@ -96,6 +96,7 @@ export default function MonthSelector({
 
   return (
     <div
+      className="month-selector-header"
       style={{
         position: 'sticky',
         top: 0,
@@ -103,30 +104,41 @@ export default function MonthSelector({
         background: 'var(--color-bg)',
         borderBottom: '1px solid var(--color-border-light)',
         boxShadow: 'var(--shadow-sm)',
-        overflow: 'visible',
         fontFamily: "'Pretendard', sans-serif",
       }}
     >
       <div
+        className="month-selector-inner"
         style={{
           display: 'flex',
           alignItems: 'center',
+          flexWrap: 'wrap',
           padding: '10px 20px 10px',
           gap: 8,
         }}
       >
-        {/* 월 탭 — 스크롤 */}
+        {/* 월 탭 + 카운트 영역 (좁은 화면에서 한 줄) */}
         <div
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 4,
-            overflowX: 'auto',
-            flex: 1,
+            gap: 8,
+            flex: '1 1 0%',
             minWidth: 0,
           }}
-          className="tab-scroll"
+          className="month-selector-row1"
         >
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 4,
+              overflowX: 'auto',
+              flex: '1 1 0%',
+              minWidth: 0,
+            }}
+            className="tab-scroll"
+          >
           {months.map((m) => {
             const monthNum = Number(m) as Month
             const isSelected = selectedMonth === monthNum
@@ -201,8 +213,11 @@ export default function MonthSelector({
               </button>
             </div>
           )}
-        {/* 필터 영역 */}
+        </div>
+
+        {/* 필터 영역 — 좁은 화면에서 월 버튼 아래로 내려감 */}
         <div
+          className="month-selector-filters"
           style={{
             marginLeft: 'auto',
             display: 'flex',

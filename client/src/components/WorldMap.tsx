@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import {
   ComposableMap,
   Geographies,
@@ -15,6 +15,8 @@ const GEO_URL = 'https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json'
 const MIN_ZOOM = 0.5
 const MAX_ZOOM = 8
 const ZOOM_STEP = 0.5
+/** 이 너비 기준으로 마커 픽셀 크기가 일정해짐 (뷰포트가 줄어도 마커는 같은 크기로 보임) */
+const MARKER_REFERENCE_WIDTH = 600
 
 interface WorldMapProps {
   destinations: Destination[]
@@ -30,6 +32,21 @@ export default function WorldMap({ destinations, onDestinationClick }: WorldMapP
   const [zoom, setZoom] = useState(1)
   const [center, setCenter] = useState<[number, number]>([0, 20])
   const [tooltip, setTooltip] = useState<TooltipState | null>(null)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [containerWidth, setContainerWidth] = useState<number>(MARKER_REFERENCE_WIDTH)
+
+  useEffect(() => {
+    const el = containerRef.current
+    if (!el) return
+    const ro = new ResizeObserver(() => {
+      const w = el.getBoundingClientRect().width
+      setContainerWidth(w > 0 ? w : MARKER_REFERENCE_WIDTH)
+    })
+    ro.observe(el)
+    setContainerWidth(el.getBoundingClientRect().width || MARKER_REFERENCE_WIDTH)
+    return () => ro.disconnect()
+  }, [])
+
   const handleMoveEnd = useCallback(
     (payload: { coordinates: [number, number]; zoom: number }) => {
       if (payload.coordinates != null) setCenter(payload.coordinates)
@@ -61,6 +78,7 @@ export default function WorldMap({ destinations, onDestinationClick }: WorldMapP
 
   return (
     <div
+      ref={containerRef}
       data-map-container="true"
       style={{
         position: 'relative',
@@ -68,7 +86,7 @@ export default function WorldMap({ destinations, onDestinationClick }: WorldMapP
         height: '100%',
         minHeight: 320,
         background: 'var(--gradient-map)',
-        padding: '0 1rem 1rem',
+        padding: '0 0 1rem',
         boxSizing: 'border-box',
       }}
     >
@@ -108,6 +126,8 @@ export default function WorldMap({ destinations, onDestinationClick }: WorldMapP
               coordinates={coordinates}
               destination={destination}
               zoom={zoom}
+              containerWidth={containerWidth}
+              referenceWidth={MARKER_REFERENCE_WIDTH}
               onClick={() => onDestinationClick(destination)}
               onTooltipShow={setTooltip}
               onTooltipHide={() => setTooltip(null)}

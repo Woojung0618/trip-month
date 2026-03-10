@@ -21,13 +21,58 @@ html, body {
   flex-direction: column;
 }
 
-/* 월 탭 가로 스크롤 (스크롤바 숨김) */
+/* 월별 헤더: 너비 제한. overflow는 row1에서만 적용해 드롭다운이 지도 위에 보이도록 */
+.month-selector-header {
+  width: 100%;
+  max-width: 100%;
+}
+.month-selector-inner {
+  min-width: 0;
+}
+/* row1이 넘치지 않게 하고, 그 안 .tab-scroll이 가로 스크롤 담당 */
+.month-selector-row1 {
+  overflow: hidden;
+}
+
 .tab-scroll {
+  min-width: 0; /* flex 자식이 내용보다 줄어들 수 있게 */
+  overflow-x: auto !important;
+  -webkit-overflow-scrolling: touch;
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
 .tab-scroll::-webkit-scrollbar {
   display: none;
+}
+
+/* 월 선택기: 좁은 화면에서 대륙/가격 필터를 월 버튼 아래로 */
+@media (max-width: 768px) {
+  .month-selector-inner {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .month-selector-row1 {
+    flex: none;
+    max-width: 100%; /* 월 탭이 한 줄로 넘칠 때 가로 스크롤 유지 */
+  }
+  .month-selector-filters {
+    margin-left: 0 !important;
+    padding-left: 0 !important;
+    padding-top: 4px !important;
+    margin-top: 2px !important;
+    border-left: none !important;
+    border-top: none !important;
+    width: 100%;
+    justify-content: center;
+  }
+  /* 좁은 화면에서 월 섹션과 필터 사이 구분선을 헤더 전체 너비로 */
+  .month-selector-filters::before {
+    content: '';
+    display: block;
+    border-top: 1px solid var(--color-border-light);
+    margin: 0 calc(-1 * 20px) 4px; /* inner의 padding 20px만큼 좌우로 넓힘 */
+    box-sizing: content-box;
+  }
 }
 
 /* 필터 드롭다운 패널 등장 애니메이션 */
