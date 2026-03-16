@@ -5,8 +5,10 @@ import cors from 'cors'
 import { fileURLToPath } from 'url'
 import { dirname, join } from 'path'
 import { existsSync } from 'fs'
+import cron from 'node-cron'
 import destinations from './routes/destinations.js'
 import admin from './routes/admin.js'
+import { updateAllFlightPrices } from './jobs/updateFlightPrices.js'
 
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const clientDist = join(__dirname, '..', 'client', 'dist')
@@ -37,3 +39,16 @@ app.listen(PORT, () => {
   console.log(`Server running at http://localhost:${PORT}`)
   if (isProduction) console.log('Serving client build from client/dist')
 })
+
+// 항공권 가격 자동 업데이트 스케줄러
+// 매일 03:00 KST = UTC 18:00 (전날)
+// cron 표현식: '분 시 일 월 요일' → '0 18 * * *'
+cron.schedule('0 18 * * *', async () => {
+  console.log('[cron] 항공권 가격 업데이트 시작')
+  try {
+    await updateAllFlightPrices()
+  } catch (err) {
+    console.error('[cron] 항공권 가격 업데이트 실패:', err)
+  }
+})
+console.log('[cron] 항공권 가격 스케줄러 등록 완료 (매일 03:00 KST)')
