@@ -84,7 +84,7 @@ export default function DestinationMarker({
         <circle
           r={20}
           fill="var(--color-primary-muted)"
-          style={{ animation: 'destination-marker-ping 2s ease-out infinite' }}
+          style={{ animation: 'destination-marker-ping 2s ease-out infinite', pointerEvents: 'none' }}
         />
         <circle
           r={16}
