@@ -106,3 +106,12 @@ export async function adminLogin(password: string): Promise<{ ok: boolean }> {
   const data = await res.json()
   return data
 }
+
+export async function updateFlightPrices(password: string): Promise<{ ok: boolean; message?: string }> {
+  const res = await fetch(`${API_BASE}/admin/update-prices`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password }),
+  })
+  return res.json()
+}
