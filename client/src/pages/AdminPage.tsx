@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useMemo } from 'react'
-import { getDestinations, updateDestination, createDestination, deleteDestination, adminLogin, type Destination } from '../api/client'
+import { getDestinations, updateDestination, createDestination, deleteDestination, adminLogin, updateFlightPrices, type Destination } from '../api/client'
 import { getCountriesForSelect, codeToNameKo } from '../data/countries'
 import { parseExcelToDestinations } from '../utils/excelUpload'
 /** 새 행(빈 draft) 또는 복사용 draft의 id는 음수 */
@@ -95,6 +95,8 @@ export default function AdminPage() {
   const excelInputRef = useRef<HTMLInputElement>(null)
   const [uploadingExcel, setUploadingExcel] = useState(false)
   const [excelUploadMessage, setExcelUploadMessage] = useState<string | null>(null)
+  const [updatingPrices, setUpdatingPrices] = useState(false)
+  const [priceUpdateMessage, setPriceUpdateMessage] = useState<string | null>(null)
   const [searchQuery, setSearchQuery] = useState('')
   const countryOptions = getCountriesForSelect()
 
@@ -126,6 +128,19 @@ export default function AdminPage() {
       setAuthenticated(true)
     } else {
       setLoginError('비밀번호가 올바르지 않습니다.')
+    }
+  }
+
+  const handleUpdatePrices = async () => {
+    setUpdatingPrices(true)
+    setPriceUpdateMessage(null)
+    try {
+      const result = await updateFlightPrices(password)
+      setPriceUpdateMessage(result.message ?? (result.ok ? '업데이트 시작됨' : '실패'))
+    } catch {
+      setPriceUpdateMessage('오류가 발생했습니다.')
+    } finally {
+      setUpdatingPrices(false)
     }
   }
 
@@ -503,8 +518,29 @@ export default function AdminPage() {
           >
             {uploadingExcel ? '업로드 중...' : '📤 엑셀 업로드'}
           </button>
+          <button
+            type="button"
+            onClick={handleUpdatePrices}
+            disabled={updatingPrices}
+            style={{
+              padding: '0.5rem 1rem',
+              cursor: updatingPrices ? 'not-allowed' : 'pointer',
+              opacity: updatingPrices ? 0.6 : 1,
+              background: 'var(--color-primary)',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '4px',
+            }}
+          >
+            {updatingPrices ? '업데이트 중...' : '✈️ 항공권 가격 업데이트'}
+          </button>
         </div>
       </div>
+      {priceUpdateMessage && (
+        <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: 'var(--color-text-secondary, #666)' }}>
+          ✈️ {priceUpdateMessage}
+        </p>
+      )}
       {excelUploadMessage && (
         <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: 'var(--color-text-secondary, #666)' }}>
           {excelUploadMessage}
