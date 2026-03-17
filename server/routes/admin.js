@@ -12,16 +12,20 @@ router.post('/login', (req, res) => {
 
 // 항공권 가격 수동 업데이트 트리거
 // POST /api/admin/update-prices  { "password": "..." }
-router.post('/update-prices', (req, res) => {
+// 완료까지 대기 후 결과 반환 (약 60~120초 소요)
+router.post('/update-prices', async (req, res) => {
   const { password } = req.body || {}
   if (password !== ADMIN_PASSWORD) {
     return res.status(401).json({ ok: false, message: '인증 실패' })
   }
-  // 응답 먼저 반환 후 백그라운드 실행 (124개 처리에 약 60초 소요)
-  res.json({ ok: true, message: '가격 업데이트가 시작되었습니다. 약 60초 후 완료됩니다.' })
-  updateAllFlightPrices().catch((err) =>
+  try {
+    const result = await updateAllFlightPrices()
+    const msg = `완료: ${result.updated}개 업데이트, ${result.skipped}개 건너뜀, ${result.failed}개 실패`
+    res.json({ ok: true, message: msg, result })
+  } catch (err) {
     console.error('[admin/update-prices] 실패:', err)
-  )
+    res.status(500).json({ ok: false, message: `오류: ${err.message}` })
+  }
 })
 
 export default router

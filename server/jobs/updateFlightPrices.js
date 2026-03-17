@@ -8,10 +8,11 @@ import pool from '../db/connection.js'
 import { fetchLowestOffer } from './duffelFetcher.js'
 
 // ── 환율 조회 ──────────────────────────────────────────────────────
-// GET https://api.frankfurter.app/latest?to=KRW
-// 응답: { "base": "EUR", "rates": { "KRW": 1530.2, "GBP": 0.845, "USD": 1.08, ... } }
+// GET https://api.frankfurter.app/latest  (파라미터 없이 → 모든 통화 반환)
+// 응답: { "base": "EUR", "rates": { "KRW": 1579, "USD": 1.086, "GBP": 0.847, ... } }
+// ⚠️ ?to=KRW 로 쓰면 KRW만 반환되어 USD/GBP 변환 불가 → 파라미터 없이 호출
 async function fetchExchangeRatesToKRW() {
-  const res = await fetch('https://api.frankfurter.app/latest?to=KRW')
+  const res = await fetch('https://api.frankfurter.app/latest')
   if (!res.ok) throw new Error(`환율 조회 실패: HTTP ${res.status}`)
   return res.json()
 }
