@@ -113,7 +113,10 @@ export async function updateAllFlightPrices() {
 
         await pool.query(
           `UPDATE destinations
-           SET "averageFlightPrice" = $1,
+           -- PostgreSQL은 따옴표 없는 컬럼명을 소문자로 저장합니다.
+           -- schema.pg.sql의 averageFlightPrice는 실제로 averageflightprice 컬럼으로 생성되어,
+           -- "averageFlightPrice"(대소문자 구분)로 접근하면 컬럼이 없다고 에러가 납니다.
+           SET averageflightprice = $1,
                price_updated_at     = NOW(),
                price_source         = 'duffel'
            WHERE id = $2`,
