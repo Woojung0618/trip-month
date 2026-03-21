@@ -72,6 +72,60 @@ export const COUNTRY_LIST: { code: string; nameKo: string }[] = [
   { code: 'fi', nameKo: '핀란드' },
   { code: 'is', nameKo: '아이슬란드' },
   { code: 'bt', nameKo: '부탄' },
+  // 동유럽
+  { code: 'si', nameKo: '슬로베니아' },
+  { code: 'sk', nameKo: '슬로바키아' },
+  { code: 'ba', nameKo: '보스니아헤르체고비나' },
+  { code: 'rs', nameKo: '세르비아' },
+  { code: 'bg', nameKo: '불가리아' },
+  { code: 'lt', nameKo: '리투아니아' },
+  { code: 'lv', nameKo: '라트비아' },
+  { code: 'ee', nameKo: '에스토니아' },
+  { code: 'ua', nameKo: '우크라이나' },
+  { code: 'mk', nameKo: '북마케도니아' },
+  { code: 'al', nameKo: '알바니아' },
+  // 코카서스·중앙아시아
+  { code: 'ge', nameKo: '조지아' },
+  { code: 'am', nameKo: '아르메니아' },
+  { code: 'uz', nameKo: '우즈베키스탄' },
+  { code: 'kz', nameKo: '카자흐스탄' },
+  // 중동
+  { code: 'jo', nameKo: '요르단' },
+  { code: 'ir', nameKo: '이란' },
+  // 아시아
+  { code: 'np', nameKo: '네팔' },
+  { code: 'la', nameKo: '라오스' },
+  { code: 'mn', nameKo: '몽골' },
+  // 아프리카
+  { code: 'et', nameKo: '에티오피아' },
+  { code: 'gh', nameKo: '가나' },
+  { code: 'tz', nameKo: '탄자니아' },
+  { code: 'ug', nameKo: '우간다' },
+  { code: 'rw', nameKo: '르완다' },
+  { code: 'mz', nameKo: '모잠비크' },
+  { code: 'zw', nameKo: '짐바브웨' },
+  { code: 'bw', nameKo: '보츠와나' },
+  { code: 'na', nameKo: '나미비아' },
+  { code: 'mg', nameKo: '마다가스카르' },
+  { code: 'mu', nameKo: '모리셔스' },
+  // 오세아니아
+  { code: 'fj', nameKo: '피지' },
+  { code: 'pg', nameKo: '파푸아뉴기니' },
+  // 카리브해·태평양
+  { code: 'jm', nameKo: '자메이카' },
+  { code: 'bb', nameKo: '바베이도스' },
+  { code: 'tt', nameKo: '트리니다드토바고' },
+  { code: 'do', nameKo: '도미니카공화국' },
+  { code: 'ht', nameKo: '아이티' },
+  { code: 'pr', nameKo: '푸에르토리코' },
+  // 기타 유럽
+  { code: 'lu', nameKo: '룩셈부르크' },
+  { code: 'mt', nameKo: '몰타' },
+  { code: 'cy', nameKo: '키프로스' },
+  { code: 'ad', nameKo: '안도라' },
+  { code: 'sm', nameKo: '산마리노' },
+  { code: 'mc', nameKo: '모나코' },
+  { code: 'li', nameKo: '리히텐슈타인' },
 ]
 
 const CODE_TO_NAME_KO = Object.fromEntries(COUNTRY_LIST.map((c) => [c.code, c.nameKo]))
