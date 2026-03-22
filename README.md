@@ -1,64 +1,111 @@
-# Trip Map Global
+# 🌍 TripMonth
 
-월별 여행지 추천 지도 웹 (React + Vite + Express + SQLite)
+**월별 최적 여행지를 지도로 추천하는 서비스**
 
-**배포 URL**: [https://trip-map-global.onrender.com/](https://trip-map-global.onrender.com/)
+> 1월부터 12월까지, 지금 가기 가장 좋은 여행지를 한눈에 확인하세요.
 
-## 구조
+🔗 **[www.tripmonth.com](https://www.tripmonth.com)**
 
-| 디렉터리 | 설명 |
-|----------|------|
-| **client** | React + Vite 프론트엔드. 메인 지도(월별 추천지), 관리자 페이지(`/admin`) |
-| **server** | Express API + SQLite. 목적지 조회·수정, 관리자 로그인 |
+---
 
-**지도**  
-메인 화면은 [react-simple-maps](https://www.react-simple-maps.io/)와 [world-atlas](https://github.com/topojson/world-atlas) TopoJSON(`countries-110m`)으로 세계 지도를 그립니다. 위·경도가 있으면 해당 좌표에, 없으면 국가 중심(centroid)에 핀을 표시합니다.
+## 주요 기능
 
-## 실행
+- 🗺️ **세계 지도 기반 탐색** — 월별로 추천 여행지를 지도 위에 핀으로 표시
+- ✈️ **항공권 최저가 연동** — 여행지별 항공권 최저가 및 예약 링크 제공
+- 🌤️ **현지 날씨 & 추천 시즌** — 기온, 날씨, 최적 방문 시기 정보
+- 📍 **220개 여행지** — 전 세계 주요 도시 및 숨겨진 여행지 수록
+- 🔐 **관리자 페이지** — 여행지 정보 실시간 수정 및 관리
+
+---
+
+## 기술 스택
+
+| 영역 | 기술 |
+|------|------|
+| 프론트엔드 | React, Vite, TypeScript, Tailwind CSS |
+| 백엔드 | Node.js, Express |
+| 데이터베이스 | PostgreSQL (Supabase) |
+| 지도 | react-simple-maps, world-atlas TopoJSON |
+| 배포 | Render |
+
+---
+
+## 프로젝트 구조
+
+```
+trip-map-global/
+├── client/               # React + Vite 프론트엔드
+│   ├── src/
+│   │   ├── components/   # UI 컴포넌트 (지도, 카드, 모달 등)
+│   │   ├── pages/        # 메인 페이지, 관리자 페이지
+│   │   └── data/         # 국가코드 매핑 등 정적 데이터
+│   └── public/           # favicon, sitemap.xml, robots.txt
+└── server/               # Express API 서버
+    ├── db/               # DB 연결 및 쿼리
+    ├── routes/           # API 라우터
+    └── scripts/          # DB 관리 스크립트
+```
+
+---
+
+## 로컬 실행
+
+### 사전 요구사항
+- Node.js 18+
+- Supabase 프로젝트 (PostgreSQL)
+
+### 설치 및 실행
 
 ```bash
-# 의존성 설치 (루트 → client → server)
+# 1. 의존성 설치
 npm install && cd client && npm install && cd ../server && npm install && cd ..
 
-# DB 초기화 (테이블 생성 + 시드 데이터)
-npm run db:init
+# 2. 환경변수 설정
+cp .env.example .env
+# .env에 DATABASE_URL, ADMIN_PASSWORD 입력
 
-# 개발 (클라이언트 + 서버 동시)
+# 3. 개발 서버 실행 (클라이언트 + 서버 동시)
 npm run dev
 ```
 
-- 클라이언트: http://localhost:5173  
-- API/서버: http://localhost:3001  
+- 클라이언트: http://localhost:5173
+- API 서버: http://localhost:3001
+
+---
 
 ## API
 
 | 메서드 | 경로 | 설명 |
 |--------|------|------|
-| GET | `/api/destinations?month=1` | 해당 월 추천지 목록 |
-| GET | `/api/destinations` | 전체 목록 |
-| GET | `/api/destinations/:id/months` | 해당 목적지가 추천되는 월 목록 |
-| PATCH | `/api/destinations/:id` | 제휴 링크·평균가 등 수정 (body: `affiliateUrl`, `averageFlightPrice` 등) |
-| POST | `/api/admin/login` | 관리자 로그인 (body: `password`) |
-| GET | `/api/health` | 헬스체크 |
+| GET | `/api/destinations?month=1` | 월별 추천 여행지 목록 |
+| GET | `/api/destinations` | 전체 여행지 목록 |
+| GET | `/api/destinations/:id/months` | 특정 여행지의 추천 월 목록 |
+| PATCH | `/api/destinations/:id` | 여행지 정보 수정 |
+| POST | `/api/admin/login` | 관리자 로그인 |
+| GET | `/api/health` | 서버 상태 확인 |
+
+---
 
 ## 관리자
 
 - 경로: `/admin`
-- 로그인: 서버의 `ADMIN_PASSWORD` 환경 변수와 일치하는 비밀번호 사용 (로컬은 `.env`에 설정)
+- 환경변수 `ADMIN_PASSWORD`와 일치하는 비밀번호로 로그인
 
-## 배포
+---
 
-- **빌드**: `npm run deploy:build` (클라이언트 빌드 + DB 시드)
-- **실행**: `npm start` (서버가 `client/dist` 정적 제공 + API)
-- **Render**: [DEPLOY.md](./DEPLOY.md) 참고 (Blueprint·환경 변수·DB 영속화 등)
+## 스크립트
 
-## 스크립트 요약
+| 명령어 | 설명 |
+|--------|------|
+| `npm run dev` | 프론트엔드 + 백엔드 개발 서버 동시 실행 |
+| `npm run build` | 프론트엔드 프로덕션 빌드 |
+| `npm start` | 프로덕션 서버 실행 |
+| `npm run deploy:build` | 빌드 + DB 초기화 (배포 전용) |
 
-| 스크립트 | 설명 |
-|----------|------|
-| `npm run dev` | 클라이언트·서버 동시 개발 서버 |
-| `npm run build` | 클라이언트만 빌드 |
-| `npm run db:init` | DB 초기화 + 시드 |
-| `npm run deploy:build` | 빌드 + DB 시드 (배포 전용) |
-| `npm start` | 서버만 실행 (프로덕션) |
-| `npm run preview` | 빌드 후 로컬에서 프로덕션 동작 확인 |
+---
+
+## SEO
+
+- `client/public/sitemap.xml` — 전체 페이지 사이트맵
+- `client/public/robots.txt` — 크롤러 접근 설정
+- Google Search Console 등록 완료
