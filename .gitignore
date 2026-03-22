@@ -44,3 +44,9 @@ coverage/
 # Misc
 .cache/
 .turbo/
+
+# Claude Code worktrees
+.claude/worktrees/
+
+# Generated prompt results (Claude 채팅 결과물)
+server/scripts/prompts/result_*.json
